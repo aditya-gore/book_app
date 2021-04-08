@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Mockery\Undefined;
 
 class UserController extends Controller
 {
@@ -68,7 +69,7 @@ class UserController extends Controller
         if ($result) {
             return $result;
         } else {
-            return ['result' => 'user not found'];
+            return null;
         }
     }
 }

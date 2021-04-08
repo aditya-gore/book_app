@@ -32,7 +32,7 @@ class BooksController extends Controller
         $book = Book::find($id);
         $book->title = $req->input('title');
         $book->author = $req->input('author');
-        $book->genreId = $req->input('genreId');
+        $book->genre_id = $req->input('genre_id');
         $book->description = $req->input('description');
         $book->numberInStock = $req->input('numberInStock');
         if ($req->file('image')) {
