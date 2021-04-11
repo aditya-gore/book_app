@@ -72,4 +72,25 @@ class UserController extends Controller
             return null;
         }
     }
+
+    function makeAdmin($email)
+    {
+        $result = User::where('email', $email)->first();
+        if ($result) {
+            $result->isAdmin = true;
+            $result->save();
+            return $result;
+        } else {
+            return 'User not forund';
+        }
+    }
+
+    function deleteUser($email)
+    {
+        $result = User::where('email', $email)->delete();
+        if ($result)
+            return $result;
+        else
+            return 'User not found';
+    }
 }

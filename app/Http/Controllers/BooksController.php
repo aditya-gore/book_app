@@ -61,4 +61,27 @@ class BooksController extends Controller
             return ['result' => 'Book not found'];
         }
     }
+
+    function getNumberInStock($id)
+    {
+        $result = Book::where('id', $id)->first();
+        return $result->numberInStock;
+    }
+
+    function decrementStock($id)
+    {
+        if ($this->getNumberInStock($id) > 0) {
+
+            return Book::where('id', $id)->decrement('numberInStock');
+        } else {
+            return 'Book out of stock';
+        }
+    }
+
+    function incrementStock($id)
+    {
+        $book = Book::where('id', $id)->first()->increment('numberInStock');
+        // $book->numberInStock;
+        return $book;
+    }
 }
