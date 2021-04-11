@@ -39,7 +39,9 @@ Route::put('saveBook/{id}', [BooksController::class, 'saveBook']);
 Route::get('getReaderHistory', [HistoryController::class, 'getReaderHistory']);
 Route::get('isReading/{userId}', [HistoryController::class, 'isReading']);
 Route::get('issueBook/{bookId}', [HistoryController::class, 'issueBook']);
-Route::get('addReaderHistory/{userId}', [HistoryController::class, 'addReaderHistory']);
+Route::get('toggleWishlist/{bookId}', [HistoryController::class, 'toggleWishlist']);
+Route::get('returnBook/{bookId}', [HistoryController::class, 'returnBook']);
+
 
 Route::get('getGenres', [GenresController::class, 'getGenres']);
 

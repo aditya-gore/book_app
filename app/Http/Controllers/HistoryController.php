@@ -19,6 +19,8 @@ class HistoryController extends Controller
         $this->BooksController = $booksController;
     }
 
+    // ---------API EndPoints--------------//
+
     function getReaderHistory()
     {
         return ReaderHistory::all();
@@ -30,7 +32,50 @@ class HistoryController extends Controller
         // }
     }
 
-    function addReaderHistory($userId, $bookId)
+
+
+    function issueBook($bookid, Request $req)
+    {
+        $userId = $req->input('userId');
+        if ($this->isReading($userId)) {
+            return 'Return current book first';
+        } else if ($this->BooksController->getNumberInStock($bookid)) {
+            return $this->addIssuedAt($userId, $bookid);
+        }
+    }
+
+    function returnBook($bookId, Request $req)
+    {
+        $userId = $req->input('userId');
+        if ($this->isReading($userId)) {
+            return $this->addFinishedAt($userId, $bookId);
+        } else {
+            return 'You have no book issued';
+        }
+    }
+
+    function toggleWishlist($bookId, Request $req)
+    {
+        $userId = $req->input('userId');
+        $history = ReaderHistory::where('userId', $userId)->where('bookId', $bookId)->first();
+        if ($history) {
+            $history->wishlisted = ($history->wishlisted) ? false : true;
+            $history->save();
+            return $history;
+        } else {
+            $newHistory = new ReaderHistory();
+            $newHistory->userId = $userId;
+            $newHistory->bookId = $bookId;
+            $newHistory->wishlisted = true;
+            $newHistory->save();
+            return $newHistory;
+        }
+    }
+
+
+    //---------------------Helper Methods-----------------------//
+
+    function addIssuedAt($userId, $bookId)
     {
         // $bookId = $req->input('bookId');
         $this->BooksController->decrementStock($bookId);
@@ -53,6 +98,20 @@ class HistoryController extends Controller
         }
     }
 
+    function addFinishedAt($userId, $bookId)
+    {
+        $this->BooksController->incrementStock($bookId);
+        $history = ReaderHistory::where('userId', $userId)->where('bookId', $bookId)->first();
+        if ($history) {
+            $history->currently_Reading = false;
+            $history->finishedAt = Carbon::now();
+            $history->save();
+            return $history;
+        } else {
+            return 'Record not found';
+        }
+    }
+
     function isReading($userId)
     {
         $result = ReaderHistory::where('userId', $userId)
@@ -61,15 +120,5 @@ class HistoryController extends Controller
             return 1;
         else
             return 0;
-    }
-
-    function issueBook($bookid, Request $req)
-    {
-        $userId = $req->input('userId');
-        if ($this->isReading($userId)) {
-            return 'Return current book first';
-        } else if ($this->BooksController->getNumberInStock($bookid)) {
-            return $this->addReaderHistory($userId, $bookid);
-        }
     }
 }
