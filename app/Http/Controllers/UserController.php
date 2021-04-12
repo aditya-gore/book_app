@@ -93,4 +93,20 @@ class UserController extends Controller
         else
             return 'User not found';
     }
+
+    function getAllUsers($userId)
+    {
+        // $userId = $req->input('userId');
+        $user = User::find($userId);
+        if ($user->isAdmin) {
+            return User::all();
+        } else {
+            return 'Not Authorised';
+        }
+        // if ($isAdmin) {
+        // } else {
+        //     return 'Only admin can call this endpoint';
+        // }
+        // return $isAdmin;
+    }
 }

@@ -25,6 +25,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 Route::get('getUserById/{id}', [UserController::class, 'getUserById']);
+Route::get('getAllUsers/{id}', [UserController::class, 'getAllUsers']);
 Route::put('makeAdmin/{email}', [UserController::class, 'makeAdmin']);
 Route::delete('deleteUser/{email}', [UserController::class, 'deleteUser']);
 
