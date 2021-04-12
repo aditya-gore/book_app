@@ -21,18 +21,26 @@ class HistoryController extends Controller
 
     // ---------API EndPoints--------------//
 
-    function getReaderHistory()
+    function getReaderHistory($userId)
     {
-        return ReaderHistory::all();
-        // $result = ReaderHistory::where('userId', $userId)->first();
-        // if ($result) {
-        //     return $result;
-        // } else {
-        //     return 'No books read so far!';
-        // }
+        // return ReaderHistory::all();
+        $result = ReaderHistory::where('userId', $userId)->where('finishedAt', '!=', null)->get();
+        if ($result) {
+            return $result;
+        } else {
+            return 'No books read so far!';
+        }
     }
 
-
+    function getWishlist($userId)
+    {
+        $result = ReaderHistory::where('userId', $userId)->where('wishlisted', '=', 1)->get();
+        if ($result) {
+            return $result;
+        } else {
+            return 'No books in the wishlist';
+        }
+    }
 
     function issueBook($bookid, Request $req)
     {
