@@ -85,28 +85,25 @@ class UserController extends Controller
         }
     }
 
-    function deleteUser($email)
+    function deleteUser($id)
     {
-        $result = User::where('email', $email)->delete();
+        $result = User::where('id', $id)->delete();
         if ($result)
             return $result;
         else
-            return 'User not found';
+            return response()->json(['status' => 404], 404);
     }
 
-    function getAllUsers($userId)
+    function getAllUsers()
     {
-        // $userId = $req->input('userId');
-        $user = User::find($userId);
-        if ($user->isAdmin) {
-            return User::all();
-        } else {
-            return 'Not Authorised';
-        }
-        // if ($isAdmin) {
+        return User::all();
+        // $userEmail = $req->input('email');
+        // $userId = User::where('email', $userEmail)->first();
+        // $user = User::find($userEmail);
+        // return $userEmail;
+        // if ($user->isAdmin) {
         // } else {
-        //     return 'Only admin can call this endpoint';
+        //     return 'Not Authorised';
         // }
-        // return $isAdmin;
     }
 }
